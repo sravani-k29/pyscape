@@ -21,7 +21,12 @@ Pyscape is a web-based adaptive learning platform focused on Python, Artificial 
 4. **Real-time Learning Engagement**
    - AI news and updates dashboard
    - Real-time coding duels
-   - In-browser ML sandbox
+   - **ML Sandbox with Multi-Language Code Execution**
+     - JavaScript (client-side execution)
+     - Python, Java, C, C++ (server-side execution via Judge0 API)
+     - Real-time code compilation and execution
+     - Interactive input/output handling
+     - Syntax highlighting and error reporting
 
 5. **Portfolio View**
    - Project showcasing
@@ -35,6 +40,29 @@ Pyscape is a web-based adaptive learning platform focused on Python, Artificial 
 - **AI & Learning Engine**: OpenAI/Anthropic API, LangChain
 - **Algorithm Visualizer**: D3.js / React-Vis
 - **Real-time Components**: Supabase Realtime, WebSockets, Pyodide
+- **Code Execution**: Judge0 CE API via RapidAPI, CodeMirror Editor
+
+## ML Sandbox Features
+
+The ML Sandbox provides a comprehensive code execution environment supporting multiple programming languages:
+
+### Supported Languages
+- **JavaScript**: Instant browser-based execution with live console output
+- **Python**: Server-side execution with full library support (NumPy, Pandas, Matplotlib)
+- **Java**: Compile and run Java programs with automatic compilation
+- **C/C++**: Native compilation and execution with GCC
+
+### Key Features
+- 🎨 **Modern Code Editor**: Syntax highlighting, auto-completion, and multiple themes
+- ⚡ **Real-time Execution**: Instant feedback with detailed output and error reporting
+- 📊 **Interactive Input**: Support for user input through stdin for interactive programs
+- 🌓 **Theme Support**: Dark and light mode with customizable interface
+- 💾 **Code Management**: Copy, share, and download code snippets
+- 🔒 **Secure Execution**: All server-side code runs in isolated, secure environments
+
+### Code Execution Models
+- **Client-side (JavaScript)**: Runs directly in browser sandbox for immediate feedback
+- **Server-side (Python, Java, C, C++)**: Powered by Judge0 CE API for secure, scalable execution
 
 ## Getting Started
 
@@ -61,7 +89,18 @@ Pyscape is a web-based adaptive learning platform focused on Python, Artificial 
    REACT_APP_SUPABASE_URL=your-supabase-project-url
    REACT_APP_SUPABASE_ANON_KEY=your-supabase-anon-key
    REACT_APP_GNEWS_API_KEY=your-gnews-api-key
+   REACT_APP_RAPIDAPI_KEY=your-rapidapi-key-here
    ```
+
+   **API Keys Setup:**
+   - **Supabase**: Create a project at [supabase.com](https://supabase.com) and get your URL and anon key
+   - **GNews API**: Get your API key from [gnews.io](https://gnews.io)
+   - **RapidAPI (for Code Execution)**: 
+     1. Go to [RapidAPI Judge0 CE](https://rapidapi.com/judge0-official/api/judge0-ce/)
+     2. Sign up for a free account (150 requests/month)
+     3. Subscribe to the free plan
+     4. Copy your `X-RapidAPI-Key` from the dashboard
+     5. Add it to your `.env` file as `REACT_APP_RAPIDAPI_KEY`
 
 4. **Set up Supabase Database**:
    
@@ -198,6 +237,44 @@ npm run build
 ```
 
 This creates an optimized build in the `build` folder that can be deployed to any static hosting service.
+
+## Troubleshooting
+
+### Code Execution Issues
+
+**Problem**: "RapidAPI key not configured" error in ML Sandbox
+
+**Solution**: 
+1. Ensure you have added `REACT_APP_RAPIDAPI_KEY` to your `.env` file
+2. Restart your development server after adding the key
+3. Verify your RapidAPI subscription is active
+4. Check that your key has the correct permissions for Judge0 CE API
+
+**Problem**: Code execution timeout or errors
+
+**Solution**:
+- Check your internet connection
+- Verify your RapidAPI usage limits (150 requests/month on free plan)
+- Ensure your code doesn't have infinite loops or excessive resource usage
+- Try running simpler code first to test the connection
+
+**Problem**: JavaScript code works but server-side languages don't
+
+**Solution**:
+- JavaScript runs locally, while Python/Java/C++ require RapidAPI
+- Verify your RapidAPI key is correctly configured
+- Check browser network tab for failed API requests
+- Ensure you're subscribed to the Judge0 CE API on RapidAPI
+
+### General Issues
+
+**Problem**: Application won't start
+
+**Solution**:
+1. Run `npm install` to ensure all dependencies are installed
+2. Check that all environment variables are set in `.env`
+3. Verify Node.js version is 16 or higher
+4. Clear npm cache: `npm cache clean --force`
 
 ## Contributing
 
