@@ -11,7 +11,7 @@ import Portfolio from './pages/Portfolio';
 import Auth from './pages/Auth';
 import SplashScreen from './pages/SplashScreen';
 import ProfileBuild from './pages/ProfileBuild';
-import OnboardingQuiz from './pages/OnboardingQuiz';
+import TopicSelection from './pages/TopicSelection';
 import NotFound from './pages/NotFound';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -40,12 +40,12 @@ function App() {
           }
         />
 
-        {/* Onboarding quiz (protected) */}
+        {/* Topic selection (protected) */}
         <Route
-          path="/onboarding-quiz"
+          path="/topic-selection"
           element={
             <ProtectedRoute>
-              <OnboardingQuiz />
+              <TopicSelection />
             </ProtectedRoute>
           }
         />

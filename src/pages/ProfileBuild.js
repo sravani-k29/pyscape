@@ -89,7 +89,7 @@ const ProfileBuild = () => {
         profile_complete: true
       }));
 
-      navigate('/onboarding-quiz'); // ✅ move to quiz
+      navigate('/topic-selection'); // ✅ move to topic selection
     } catch (err) {
       console.error(err);
       // Show more helpful message when possible

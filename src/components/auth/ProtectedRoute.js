@@ -23,8 +23,8 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/profile-build" replace />;
   }
 
-  if (user.profile_complete && !user.onboarding_completed && location.pathname !== "/onboarding-quiz") {
-    return <Navigate to="/onboarding-quiz" replace />;
+  if (user.profile_complete && !user.onboarding_completed && location.pathname !== "/topic-selection") {
+    return <Navigate to="/topic-selection" replace />;
   }
 
   return children;

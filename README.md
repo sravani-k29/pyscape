@@ -80,6 +80,7 @@ Pyscape is a web-based adaptive learning platform focused on Python, Artificial 
      avatar_url TEXT,
      profile_complete BOOLEAN DEFAULT FALSE,
      onboarding_completed BOOLEAN DEFAULT FALSE,
+     selected_topics TEXT[],
      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
    );
@@ -118,6 +119,16 @@ Pyscape is a web-based adaptive learning platform focused on Python, Artificial 
      EXECUTE FUNCTION public.handle_updated_at();
    ```
 
+   **If you already have an existing profiles table**, run this migration:
+   ```sql
+   -- Add the selected_topics column to existing table
+   ALTER TABLE public.profiles 
+   ADD COLUMN selected_topics TEXT[] DEFAULT NULL;
+   
+   -- Add comment for documentation
+   COMMENT ON COLUMN public.profiles.selected_topics IS 'Array of topic IDs selected by user during onboarding';
+   ```
+
 5. Start the development server:
    ```
    npm start
@@ -142,7 +153,8 @@ The `profiles` table stores user profile information:
 | bio | TEXT | User's biography |
 | avatar_url | TEXT | URL to user's avatar image |
 | profile_complete | BOOLEAN | Whether profile setup is complete |
-| onboarding_completed | BOOLEAN | Whether onboarding quiz is complete |
+| onboarding_completed | BOOLEAN | Whether topic selection is complete |
+| selected_topics | TEXT[] | Array of selected topic IDs |
 | created_at | TIMESTAMPTZ | Record creation timestamp |
 | updated_at | TIMESTAMPTZ | Last update timestamp |
 
