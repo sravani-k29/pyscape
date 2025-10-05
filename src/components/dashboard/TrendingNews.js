@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const TrendingNews = () => {
   const [articles, setArticles] = useState([]);
@@ -78,7 +79,7 @@ const TrendingNews = () => {
       <div className="text-center mt-4">
         <Link
           to="/app/all-news"
-          state={{ articles: allArticles }} // pass all articles to AllNews
+          state={{ articles }} // pass all articles to AllNews
           className="inline-block bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
         >
           Explore More →

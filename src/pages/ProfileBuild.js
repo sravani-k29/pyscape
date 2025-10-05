@@ -54,6 +54,14 @@ const ProfileBuild = () => {
     setError('');
 
     try {
+      // Ensure we have a signed-in user with an id before attempting to save
+      if (!user || !user.id) {
+        console.error('Attempted to save profile but no authenticated user found', user);
+        setError('You are not signed in. Please sign in again and try saving your profile.');
+        setLoading(false);
+        return;
+      }
+
       const { error: dbError } = await supabase
         .from('profiles')
         .upsert(
@@ -66,7 +74,13 @@ const ProfileBuild = () => {
           { onConflict: 'id' }
         );
 
-      if (dbError) throw dbError;
+      // Better surface Supabase errors for debugging
+      if (dbError) {
+        console.error('Supabase upsert error:', dbError);
+        setError(dbError.message || 'Failed to save profile. Please try again.');
+        setLoading(false);
+        return;
+      }
 
       // Update user context
       setUser(prev => ({
@@ -78,7 +92,8 @@ const ProfileBuild = () => {
       navigate('/onboarding-quiz'); // ✅ move to quiz
     } catch (err) {
       console.error(err);
-      setError('Failed to save profile. Please try again.');
+      // Show more helpful message when possible
+      setError(err?.message || 'Failed to save profile. Please try again.');
     } finally {
       setLoading(false);
     }

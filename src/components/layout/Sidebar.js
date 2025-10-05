@@ -69,12 +69,24 @@ const Sidebar = () => {
             }`
           }
         >
-          <span className="w-10 h-10 rounded-full overflow-hidden mr-2 border-2 border-gray-500">
-            <img
-              src={user?.avatar_url || '/default-avatar.png'}
-              alt="Avatar"
-              className="w-full h-full object-cover"
-            />
+          <span className="w-10 h-10 rounded-full overflow-hidden mr-2 border-2 border-gray-500 bg-gray-600 flex items-center justify-center">
+            {user?.avatar_url ? (
+              <img
+                src={user.avatar_url}
+                alt="Avatar"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                }}
+              />
+            ) : null}
+            <div 
+              className={`w-full h-full flex items-center justify-center text-gray-300 text-sm font-medium ${user?.avatar_url ? 'hidden' : 'flex'}`}
+              style={{ display: user?.avatar_url ? 'none' : 'flex' }}
+            >
+              {user?.full_name?.charAt(0)?.toUpperCase() || 'U'}
+            </div>
           </span>
           <div className="flex flex-col">
             <span>{user?.full_name || 'User Profile'}</span>

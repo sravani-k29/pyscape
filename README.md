@@ -60,15 +60,98 @@ Pyscape is a web-based adaptive learning platform focused on Python, Artificial 
    ```
    REACT_APP_SUPABASE_URL=your-supabase-project-url
    REACT_APP_SUPABASE_ANON_KEY=your-supabase-anon-key
-   REACT_APP_OPENAI_API_KEY=your-openai-api-key
+   REACT_APP_GNEWS_API_KEY=your-gnews-api-key
    ```
 
-4. Start the development server:
+4. **Set up Supabase Database**:
+   
+   Go to your Supabase dashboard → SQL Editor and run the following SQL to create the required tables:
+
+   ```sql
+   -- Create the profiles table
+   CREATE TABLE public.profiles (
+     id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
+     full_name TEXT,
+     nickname TEXT,
+     gender TEXT,
+     role TEXT,
+     organization TEXT,
+     bio TEXT,
+     avatar_url TEXT,
+     profile_complete BOOLEAN DEFAULT FALSE,
+     onboarding_completed BOOLEAN DEFAULT FALSE,
+     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+   );
+
+   -- Enable Row Level Security
+   ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+   -- Create policies to allow authenticated users to manage their own profiles
+   CREATE POLICY "Users can view their own profile" 
+   ON public.profiles 
+   FOR SELECT 
+   USING (auth.uid() = id);
+
+   CREATE POLICY "Users can insert their own profile" 
+   ON public.profiles 
+   FOR INSERT 
+   WITH CHECK (auth.uid() = id);
+
+   CREATE POLICY "Users can update their own profile" 
+   ON public.profiles 
+   FOR UPDATE 
+   USING (auth.uid() = id);
+
+   -- Create an updated_at trigger
+   CREATE OR REPLACE FUNCTION public.handle_updated_at()
+   RETURNS TRIGGER AS $$
+   BEGIN
+     NEW.updated_at = NOW();
+     RETURN NEW;
+   END;
+   $$ LANGUAGE plpgsql;
+
+   CREATE TRIGGER profiles_updated_at
+     BEFORE UPDATE ON public.profiles
+     FOR EACH ROW
+     EXECUTE FUNCTION public.handle_updated_at();
+   ```
+
+5. Start the development server:
    ```
    npm start
    ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+6. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Database Schema
+
+### Profiles Table
+
+The `profiles` table stores user profile information:
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | UUID | Primary key, references auth.users(id) |
+| full_name | TEXT | User's full name |
+| nickname | TEXT | User's preferred nickname |
+| gender | TEXT | User's gender |
+| role | TEXT | User's role (Student, Professional, etc.) |
+| organization | TEXT | User's organization/school |
+| bio | TEXT | User's biography |
+| avatar_url | TEXT | URL to user's avatar image |
+| profile_complete | BOOLEAN | Whether profile setup is complete |
+| onboarding_completed | BOOLEAN | Whether onboarding quiz is complete |
+| created_at | TIMESTAMPTZ | Record creation timestamp |
+| updated_at | TIMESTAMPTZ | Last update timestamp |
+
+### Row Level Security (RLS)
+
+The profiles table uses RLS policies to ensure users can only access their own data:
+- Users can SELECT their own profile
+- Users can INSERT their own profile
+- Users can UPDATE their own profile
 
 ## Project Structure
 

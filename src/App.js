@@ -59,17 +59,6 @@ function App() {
             </ProtectedRoute>
           }
         >
-
-        <Route
-          path="all-news"
-          element={
-            <ProtectedRoute>
-              <AllNews />
-            </ProtectedRoute>
-          }
-        />
-
-
           <Route index element={<Dashboard />} />
           <Route path="learn" element={<Learn />} />
           <Route path="visualizer" element={<AlgorithmVisualizer />} />
